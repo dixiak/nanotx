@@ -1,0 +1,5 @@
+spec.d
+Release/
+.settings/
+.project
+.cproject
