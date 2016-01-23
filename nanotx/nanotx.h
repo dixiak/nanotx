@@ -26,8 +26,8 @@ void ppmSetup();
 float readStick(int index, bool &inDefaultPos);
 bool canArm();
 
-void fillIbus();
-void sendIbusFrameIfReady();
+void fillSumd();
+void sendSbusFrameIfReady();
 
 void mainLedService();
 void mainLedModeOn();

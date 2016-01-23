@@ -2,6 +2,7 @@
 #define PPM_FRAMELENGTH 22500  //set the PPM frame length in microseconds (1ms = 1000µs)
 #define PPM_PULSELENGTH 300  //set the pulse length
 #define PPM_HEADERLENGTH 500  //set the signal header
+#define PPM_TIMINGOFFSET 3 // the time it takes to setup the middle timer
 
 #define STATE_HI_HEADER 0
 #define STATE_HI_SIGNAL 1
@@ -62,11 +63,13 @@ ISR(TIMER1_COMPA_vect){
       
     // this segment is between 200 microseconds and (22-8) millis long
     case STATE_HI_SIGNAL:
-      //digitalWrite(PPM_PIN, PPM_POLARITY);
-      OCR1A = channelValue * 2;
+      if (PPM_ENABLE) {
+        digitalWrite(PPM_PIN, PPM_POLARITY);
+      }
+      OCR1A = (channelValue - PPM_TIMINGOFFSET) * 2;
       highState = STATE_LO_STOP;
       if (channelIndex<0) {
-        fillIbus();
+        fillSumd();
       }
       break;    
 

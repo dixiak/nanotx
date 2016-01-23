@@ -84,7 +84,7 @@ void setup() {
 }
 
 void loop() {
-  sendIbusFrameIfReady();
+  sendSumdFrameIfReady();
   mainLedService();
   if (!armed && canArm()) {
     armed = true;
