@@ -43,7 +43,14 @@ void fillSumd()
 }
 
 void setSumdChannel(int channelIndex, float channelValue) {
-  int chanIntValue = 1000 + toInt(1000.0 * channelValue);
+  // 7200 = extended low 900us
+  // 16800 = extended high 2100us
+  // 12000 = mid 1500us
+  // 8000 = norm low 1000us
+  // 16000 = norm high 2000us
+
+  channelValue = 0.5f + ((channelValue - 0.5f) * (1.0f + SUMD_EDGE_OVERSHOOT));
+  int chanIntValue = 8000 + toInt(channelValue * 8000.0f);
   sumdFrame[(channelIndex * 2) + 3] = 0xff & (chanIntValue >> 8);
   sumdFrame[(channelIndex * 2) + 4] = 0xff & (chanIntValue);
 }
@@ -60,7 +67,7 @@ void sumdAsDebug() {
 //      Serial.print(ibusFrame[i], HEX);
 //    }
 
-  for (int i=0; i<14; i++) {
+  for (int i=0; i<16; i++) {
     Serial.print(getSumdChannel(i));
     Serial.print(" ");
   }
