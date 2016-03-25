@@ -73,6 +73,11 @@ void calibrate() {
     if ((stickConfig[j].enabled) && (!stickConfig[j].isDigital)) {
       int minSep = min(stickConfig[j].calibHigh - stickConfig[j].calibMid, stickConfig[j].calibMid - stickConfig[j].calibLow);
       int totalSep = stickConfig[j].calibHigh - stickConfig[j].calibLow;
+      
+      int edgeBorder = toInt((float)totalSep * EDGE_CALIB_BORDER);
+      stickConfig[j].calibLow += edgeBorder;
+      stickConfig[j].calibHigh -= edgeBorder;
+      
       Serial.print(" ");
       Serial.print(j);
       Serial.print(" low: ");

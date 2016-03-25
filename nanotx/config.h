@@ -6,6 +6,9 @@
 
 #define SUMD_ENABLE true
 #define SUMD_AS_DEBUG true
+#define SUMD_EDGE_OVERSHOOT 0.000f
 #define MAX_CHANCOUNT 16
 #define MAIN_LED_PIN 13
 #define ARM_POS_THRESHOLD 0.025f
+#define EDGE_CALIB_BORDER 0.02f
+
