@@ -5,7 +5,7 @@
 #define PPM_ENABLE true
 
 #define SUMD_ENABLE true
-#define SUMD_AS_DEBUG true
+#define SUMD_AS_DEBUG false
 #define SUMD_EDGE_OVERSHOOT 0.000f
 #define MAX_CHANCOUNT 16
 #define MAIN_LED_PIN 13
