@@ -39,3 +39,5 @@ void saveConfig();
 bool loadConfig();
 void setupConfigDefault();
 
+void meterService();
+void voltageRead();

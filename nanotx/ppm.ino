@@ -70,6 +70,7 @@ ISR(TIMER1_COMPA_vect){
       highState = STATE_LO_STOP;
       if (channelIndex<0) {
         fillSumd();
+        voltageRead();
       }
       break;    
 

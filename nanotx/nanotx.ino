@@ -73,12 +73,13 @@ void setup() {
   if (!loadConfig()) {
     noConfig = true;
     setupConfigDefault();
-    mainLedModeFastBlink();
-  } else {    
     mainLedModeSlowBlink();
+  } else {    
+    mainLedModeFastBlink();
   }  
   setupCurrentConfig();
-  pinMode(MAIN_LED_PIN, OUTPUT);  
+  pinMode(MAIN_LED_PIN, OUTPUT); 
+  analogWrite(METER_OUT_PIN, 1);
   Serial.begin(115200);
   ppmSetup();
 }
@@ -92,8 +93,9 @@ void loop() {
   }
   if (Serial.available()) {
     debugPrintConfig();
+    debugPrintSticks();
     Serial.read();
   }
-  //debugPrintSticks();
+  meterService();
 }
 

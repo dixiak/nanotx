@@ -1,21 +1,27 @@
 
+float lastKnownGoodStickPosition[MAX_CHANCOUNT];
+
+float readStickLastPosition(int index) {
+  return lastKnownGoodStickPosition[index];
+}
+
 float readStick(int index, bool &inDefaultPos) {
   inDefaultPos = true;
   if (index>=MAX_CHANCOUNT) {
     return 0.5f;
   }
-  float defaultPosition = stickConfig[index].defaultPos;
-  if (!stickConfig[index].enabled) {
-    return defaultPosition;
+  float stickResult = stickConfig[index].defaultPos;
+  if (stickConfig[index].enabled) {
+    float result = (stickConfig[index].isDigital)? readStickDigital(index):readStickAnalog(index);
+    if ((max(result, stickResult)-min(result, stickResult)) > ARM_POS_THRESHOLD) {
+      inDefaultPos = false;
+    }
+    if (armed) {
+      stickResult = (stickConfig[index].isReversed)? 1.0f-result:result;  
+    }
   }
-  float result = (stickConfig[index].isDigital)? readStickDigital(index):readStickAnalog(index);
-  if ((max(result, defaultPosition)-min(result, defaultPosition)) > ARM_POS_THRESHOLD) {
-    inDefaultPos = false;
-  }
-  if (!armed) {
-    return defaultPosition;
-  }
-  return (stickConfig[index].isReversed)? 1.0f-result:result;
+  lastKnownGoodStickPosition[index]=stickResult;
+  return stickResult;
 }
 
 float readStickAnalog(int index) {
