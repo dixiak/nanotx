@@ -18,6 +18,6 @@
 
 #define METER_ENABLE true
 #define METER_LOW 0
-#define METER_HIGH 100
-#define VOLTAGE_LOW 10.0f //7.0f
-#define VOLTAGE_HIGH 13.0f //8.0f
+#define METER_HIGH 110
+#define VOLTAGE_LOW 7.0f   // 2S
+#define VOLTAGE_HIGH 8.5f  // 2S
