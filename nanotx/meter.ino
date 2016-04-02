@@ -14,11 +14,13 @@ void meterService() {
   if (METER_ENABLE) {
     long now = millis();
     if (now-meterLastTime>50) {
+
       meterLastTime = now;
+      float actualVoltage = 1.0427f * 3.0f * 5.0f * ((float)rawVoltage / 1023.0f);
+      float diff = (min(abs(actualVoltage-movingAverage), 2.0f)) / 2.0f;
+      movingAverage = (diff * actualVoltage) + ((1.0f-diff) * movingAverage);
       
       float scale = (float)(METER_HIGH - METER_LOW);
-      float actualVoltage = 1.0427f * 3.0f * 5.0f * ((float)rawVoltage / 1023.0f);
-      movingAverage = (0.05f * actualVoltage) + (0.95f * movingAverage);
       float voltageScale = (movingAverage - VOLTAGE_LOW)/(VOLTAGE_HIGH - VOLTAGE_LOW);
       int channelValue = METER_LOW + toInt(voltageScale * scale);
       if (channelValue<METER_LOW) {
