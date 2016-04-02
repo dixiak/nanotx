@@ -24,6 +24,7 @@ int toInt(float fractional) {
 
 void ppmSetup();
 float readStick(int index, bool &inDefaultPos);
+float readStickLastPosition(int index);
 bool canArm();
 
 void fillSumd();

@@ -54,34 +54,43 @@ void configure() {
   stickConfig[6].defaultPos=1.0f;
 }
 
-void xsetup() {
-  Serial.begin(115200);
+void doCalibSetup() {
   configure();
   setupCurrentConfig();
-  calibrate();
-  saveConfig();
-  debugPrintConfig();
-  Serial.println("Saved");
   if (loadConfig()) {
     Serial.println("Loaded OK!");
     debugPrintConfig();
+  } else {
+    Serial.println("Load fail.");
+  }
+  if (calibrate()) {
+    saveConfig();
+    Serial.println("Saved");
+    debugPrintConfig();
+  }
+  
+  if (loadConfig()) {
+    Serial.println("Loaded OK!");
+    debugPrintConfig();
+    mainLedFlicker();
+  } else {
+    mainLedModeSlowBlink();
   }
 }
 
 void setup() {
   armed = false;
+  pinMode(MAIN_LED_PIN, OUTPUT); 
+  analogWrite(METER_OUT_PIN, 0);
+  Serial.begin(115200);  
   if (!loadConfig()) {
     noConfig = true;
-    setupConfigDefault();
-    mainLedModeSlowBlink();
+    doCalibSetup();
   } else {    
     mainLedModeFastBlink();
-  }  
-  setupCurrentConfig();
-  pinMode(MAIN_LED_PIN, OUTPUT); 
-  analogWrite(METER_OUT_PIN, 1);
-  Serial.begin(115200);
-  ppmSetup();
+    setupCurrentConfig();
+    ppmSetup();
+  }
 }
 
 void loop() {
@@ -91,11 +100,11 @@ void loop() {
     armed = true;
     mainLedModeOn();
   }
-  if (Serial.available()) {
+  /*if (Serial.available()) {
     debugPrintConfig();
     debugPrintSticks();
     Serial.read();
-  }
+  }*/
   meterService();
 }
 

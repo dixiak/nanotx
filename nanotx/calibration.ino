@@ -23,13 +23,22 @@ int calibReading(int i, int j) {
     return nowRead;
 }
 
-void calibrate() {
-  
+void blink(int howmany, int howlong) {
+  for(int i=0; i<howmany; i++) {
+      digitalWrite(MAIN_LED_PIN, HIGH);
+      delay(howlong);
+      digitalWrite(MAIN_LED_PIN, LOW);
+      delay(howlong);
+  }
+}
+
+bool calibrate() {
+
   long midTotals[MAX_CHANCOUNT];
   memset(midTotals, 0, sizeof(midTotals));
 
   Serial.println("Waiting.\n");
-  Serial.read();
+  blink(3, 200);
   
   Serial.println("Calibrating...\n");
   Serial.println("Measuring stick centre positions. Centre the sticks!\n");
@@ -58,6 +67,7 @@ void calibrate() {
       Serial.println(stickConfig[j].calibMid);
     }
   }
+  blink(5, 200);
   Serial.println("Measuring stick edges. Waggle the sticks!\n");
   
   for (int i=0; i<CALIB_TIME_EDGES/CALIB_READEVERY; i++) {
@@ -96,6 +106,7 @@ void calibrate() {
       if (stickConfig[j].isSpringCentered) {
         if (minSep<128) {
           Serial.print(" BAD SEPARATION");
+          return false;
         } else {
           if (minSep<256) {
             Serial.print(" POOR SEPARATION");
@@ -105,5 +116,6 @@ void calibrate() {
       Serial.print("\n");
     }
   }
+  return true;
 }
 
